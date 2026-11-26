@@ -10,7 +10,7 @@ npm run dev
 
 A aplicação fica em `src/app`. Os componentes reutilizáveis estão em
 `src/components`, as tipagens em `src/types` e os dados em `src/data`.
-Os arrays de serviços e modelos começam vazios.
+O catálogo contém o FlowDesk; o array de serviços permanece como estrutura inicial.
 
 ## Validação
 
@@ -145,9 +145,9 @@ desabilitado mesmo com dados válidos. Conferir também as larguras de 375, 768,
 
 ## Catálogo de modelos — Etapa 5
 
-O cadastro permanece vazio: nenhum modelo comercial ou imagem fictícia foi
-publicado. `/modelos` exibe filtros e um convite para contato enquanto a seleção
-estiver em preparação. A Home permanece sem catálogo.
+O catálogo contém o FlowDesk, com prévias locais fornecidas pelo projeto de origem.
+O estado vazio continua disponível quando não há modelos ativos. A Home permanece
+sem catálogo.
 
 ### Cadastrar um modelo
 
@@ -156,7 +156,7 @@ estiver em preparação. A Home permanece sem catálogo.
    um exemplo **comentado e fictício**, que não aparece no catálogo.
 3. Preencher `id` e `slug` únicos (slug simples, sem espaços ou barras), `name`,
    `description`, `category`, `thumbnail`, `images`, `features` e `active`.
-   Categorias aceitas: `profissionais`, `empresas` e `campanhas`.
+   Categorias aceitas: `profissionais`, `empresas`, `campanhas` e `saas`.
 4. Informar caminhos locais como `/images/templates/<slug>/capa.webp`.
    `images` pode ser vazio; a imagem principal aparece sempre. Repetições da
    imagem principal na galeria são ignoradas. Imagens usam `next/image` com
@@ -248,3 +248,69 @@ python3 -m http.server 3100 --bind 127.0.0.1 --directory out
 
 Abrir `http://localhost:3100/` e as rotas institucionais com barra final.
 O `404.html` é usado pelo Firebase para rotas desconhecidas.
+
+
+## FlowDesk — integração ao catálogo (Etapa 7.4)
+
+- Cadastro: `src/data/templates.ts`; id/slug `flowdesk`, nome `FlowDesk`, ativo.
+- Categoria: `saas`, exibida como **SaaS e Tecnologia**. Os filtros são derivados
+  de `templateCategoryLabels` em `src/lib/templates.ts`, sem uma lista paralela.
+- Página: `/modelos/flowdesk/`; exportação em `out/modelos/flowdesk/index.html`.
+- Demonstração externa: `https://landing-saas-demo.web.app`, com nova aba e
+  `noopener noreferrer`. A aplicação original continua independente.
+- Orçamento: `/contato?modelo=flowdesk`. O formulário mostra o nome do modelo e
+  seleciona **Site empresarial**. O mapeamento de categorias de catálogo para
+  serviços fica em `templateServiceCategories`; o visitante pode alterar a opção.
+  O envio continua desabilitado, conforme a estrutura comercial atual.
+- O produto comercial é a **landing page personalizável**. A interface do SaaS
+  e seus planos são demonstrativos; não incluem backend, autenticação, pagamentos
+  ou gestão real de projetos. Nenhum preço da demo é usado como orçamento.
+- A página individual usa Metadata API para título, descrição, canonical e
+  Open Graph, incluindo a imagem local no domínio institucional informado.
+
+### Origem dos recursos visuais
+
+Recursos consultados em modo somente leitura no projeto independente:
+`/home/francisco/Documentos/Chico/Projetos/PorjetoLandginPage/VendaProduto/ChatGpt/2-landing-template-saas`.
+
+| Recurso no catálogo | Origem | Dimensões e uso |
+| --- | --- | --- |
+| `public/images/templates/flowdesk/cover.webp` | `public/images/flowdesk-social.png` | 1200 × 630; imagem oficial de apresentação, convertida para WebP sem recorte |
+| `public/images/templates/flowdesk/dashboard.svg` | `public/images/flowdesk-preview.svg` | 1000 × 720; interface ilustrativa original, copiada sem alteração |
+
+Esses recursos são do projeto FlowDesk fornecido pelo usuário. Não foram
+adicionadas imagens de terceiros. A capa **não é uma captura do site publicado**.
+A tentativa de captura automática foi bloqueada pela restrição de sockets do
+ambiente. Há uma imagem principal representativa local; uma captura real da
+landing page pode substituí-la futuramente, após revisão.
+
+Para obter uma captura manual: abrir a demonstração publicada em Chrome,
+configurar o viewport desktop em 1440 × 1080, aguardar fontes e imagens e usar
+DevTools → comando “Capture screenshot”. Conferir header, hero e prévia do
+produto; exportar em WebP e substituir `cover.webp`, preservando a proporção.
+O card usa `object-contain` para não cortar o conteúdo. Não publicar uma imagem
+que pareça confirmar a existência do software demonstrado.
+
+### Validação da integração e próximos cadastros
+
+```bash
+npm run lint
+npx tsc --noEmit
+npm run build
+npm run check:export
+```
+
+Não há scripts `typecheck` ou `test` neste projeto; usar TypeScript diretamente.
+Após o build, conferir `out/modelos/flowdesk/index.html` e os dois arquivos em
+`out/images/templates/flowdesk/`, além das páginas institucionais. Testar Todos,
+SaaS e Tecnologia, categorias sem resultados e a ação de limpar filtros. Conferir
+`/contato?modelo=flowdesk`, a troca manual do tipo e um slug de modelo inválido.
+A revisão no navegador deve cobrir 320, 375, 768, 1024 e 1440 px.
+
+Para incluir um futuro modelo aprovado, adicionar seus arquivos locais e um
+objeto tipado em `src/data/templates.ts`. Informar uma demonstração real no
+`demoUrl`, categoria existente (ou estender o tipo, labels e mapeamento de serviço)
+e `active: true` quando pronto. O cadastro alimenta automaticamente cards,
+filtros, contato, metadados e `generateStaticParams()`. Reexecutar o build para
+gerar o HTML da nova rota. BemViver e outros templates não foram cadastrados
+nesta etapa. Não é necessário alterar workflows nem copiar a aplicação de origem.

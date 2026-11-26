@@ -16,7 +16,10 @@ export function TemplateDetails({ template }: { template: Template }) {
         <Container>
           <Link href="/modelos" className="inline-flex min-h-11 items-center text-sm underline text-primary transition-colors hover:text-primary-hover">Voltar aos modelos</Link>
           <div className="mt-6 max-w-reading">
-            <Badge>{templateCategoryLabels[template.category]}</Badge>
+            <div className="flex flex-wrap gap-2">
+              <Badge>{templateCategoryLabels[template.category]}</Badge>
+              {template.active && <Badge bordered>Disponível</Badge>}
+            </div>
             <Heading id="template-title" className="mt-6 text-balance">{template.name}</Heading>
             <p className="mt-6 text-muted-foreground sm:text-lg">{template.description}</p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
@@ -46,6 +49,7 @@ export function TemplateDetails({ template }: { template: Template }) {
           <div className="max-w-reading">
             <Heading level="h2" id="customization-title">Um modelo com a sua identidade.</Heading>
             <p className="mt-6 text-muted-foreground">Este modelo pode ser personalizado com suas informações, identidade visual, imagens e conteúdos, conforme o escopo contratado.</p>
+            {template.category === "saas" && <p className="mt-4 text-sm text-muted-foreground">A contratação é da landing page personalizável, não do produto ou serviço ilustrado na demonstração. O software demonstrativo é fictício: não inclui backend, banco de dados, autenticação, processamento de pagamentos ou gestão real de projetos. Os planos e valores exibidos na demonstração não são preços de contratação da landing page.</p>}
           </div>
         </Container>
       </Section>

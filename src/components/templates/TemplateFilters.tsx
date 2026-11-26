@@ -9,7 +9,7 @@ import { filterTemplatesByCategory, templateCategoryLabels } from "@/lib/templat
 import type { TemplateCategory } from "@/types/template";
 
 type CatalogItem = { id: string; category: TemplateCategory; content: ReactNode };
-const filters = ["todos", "profissionais", "empresas", "campanhas"] as const;
+const filters = ["todos", ...(Object.keys(templateCategoryLabels) as TemplateCategory[])] as const;
 
 export function TemplateFilters({ items, emptyState }: { items: CatalogItem[]; emptyState: ReactNode }) {
   const [category, setCategory] = useState<TemplateCategory | "todos">("todos");

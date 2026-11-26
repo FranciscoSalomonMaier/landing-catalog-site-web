@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { TemplateDetails } from "@/components/templates/TemplateDetails";
 import { templates } from "@/data/templates";
-import { getTemplateBySlug, getTemplateSlugs } from "@/lib/templates";
+import { getTemplateBySlug, getTemplateSlugs, templateCategoryLabels } from "@/lib/templates";
 
 export const dynamicParams = false;
 
@@ -17,7 +17,22 @@ export async function generateMetadata({ params }: PageProps<"/modelos/[slug]">)
   const { slug } = await params;
   const template = getTemplateBySlug(templates, slug);
   if (!template) notFound();
-  return { title: `${template.name} | Estúdio Web`, description: template.description };
+  const title = template.category === "saas"
+    ? `${template.name} — Landing Page para ${templateCategoryLabels[template.category]} | Estúdio Web`
+    : `${template.name} | Estúdio Web`;
+  const url = `https://landing-catalog.web.app/modelos/${encodeURIComponent(template.slug)}/`;
+  return {
+    title,
+    description: template.description,
+    alternates: { canonical: url },
+    openGraph: {
+      type: "website",
+      title,
+      description: template.description,
+      url,
+      images: [{ url: new URL(template.thumbnail, "https://landing-catalog.web.app").href, alt: `Apresentação do modelo ${template.name}` }],
+    },
+  };
 }
 
 export default async function TemplatePage({ params }: PageProps<"/modelos/[slug]">) {

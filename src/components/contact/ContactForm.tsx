@@ -4,6 +4,7 @@ import { useState } from "react";
 import type { ChangeEvent, FocusEvent } from "react";
 import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/Button";
+import { templateServiceCategories } from "@/lib/templates";
 import type { Template } from "@/types/template";
 
 type ContactModel = Pick<Template, "slug" | "name" | "category">;
@@ -111,5 +112,5 @@ export function ContactForm({ models = [] }: { models?: ContactModel[] }) {
 
   const model = models.find((item) => item.slug === searchParams.get("modelo"));
 
-  return <ContactFields key={`${model?.slug ?? ""}:${initialService}`} initialService={model?.category ?? initialService} model={model} />;
+  return <ContactFields key={`${model?.slug ?? ""}:${initialService}`} initialService={model ? templateServiceCategories[model.category] : initialService} model={model} />;
 }

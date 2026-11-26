@@ -4,6 +4,15 @@ export const templateCategoryLabels: Record<TemplateCategory, string> = {
   profissionais: "Profissionais",
   empresas: "Empresas",
   campanhas: "Campanhas e vendas",
+  saas: "SaaS e Tecnologia",
+};
+
+// Categorias de catálogo podem ser mais específicas que os serviços contratáveis.
+export const templateServiceCategories: Record<TemplateCategory, "profissionais" | "empresas" | "campanhas"> = {
+  profissionais: "profissionais",
+  empresas: "empresas",
+  campanhas: "campanhas",
+  saas: "empresas",
 };
 
 export function getActiveTemplates(templates: readonly Template[]): Template[] {

@@ -1,4 +1,4 @@
-export type TemplateCategory = "profissionais" | "empresas" | "campanhas";
+export type TemplateCategory = "profissionais" | "empresas" | "campanhas" | "saas";
 
 export interface Template {
   id: string;

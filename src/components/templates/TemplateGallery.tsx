@@ -11,6 +11,7 @@ export function TemplateGallery({ template }: { template: Template }) {
     <Section aria-labelledby="preview-title" className="border-t border-border bg-surface">
       <Container>
         <Heading level="h2" id="preview-title">Prévia visual</Heading>
+        <p className="mt-4 text-sm text-muted-foreground">Imagem de apresentação e prévias ilustrativas do modelo.</p>
         <div className="relative mt-8 aspect-[4/3] overflow-hidden rounded-lg border border-border bg-background sm:aspect-video">
           <Image src={template.thumbnail} alt={`Visão principal do modelo ${template.name}`} fill unoptimized sizes="(min-width: 1200px) 1120px, 100vw" className="object-contain" />
         </div>
